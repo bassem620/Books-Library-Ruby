@@ -2,8 +2,10 @@ require 'rails_helper'
 
 describe 'Authentication', type: :request do
     describe 'POST /authenticate' do
+        let(:user) {FactoryBot.create(:user, username: 'bassem620')}
+
         it 'authenticates the client' do
-            post '/api/v1/authenticate', params: {username: 'bassem620', password: 'test1234'}
+            post '/api/v1/authenticate', params: {username: user.username, password: 'test1234'}
             expect(response).to have_http_status(:created)
             expect(response_body).to eq({
                 'token' => '123'
