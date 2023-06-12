@@ -67,12 +67,14 @@ describe "Books API", type: :request do
     end
 
     describe "POST /books" do
+        let!(:user) {FactoryBot.create(:user, password: "test1234")}
+
         it 'create a new book' do
             expect {
                 post '/api/v1/books', params: { 
                     book: { title: "Test book"},
                     author: {first_name: "Andy", last_name: "Weir", age: 48}
-                }
+                }, headers: {"Authorization" => "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMSJ9.M1vu6qDej7HzuSxcfbE6KAMekNUXB3EWtxwS0pg4UGg"}
             }.to change { Book.count }.from(0).to(1)
             expect(response).to have_http_status(:created)
             expect(Author.count).to eq(3)
@@ -85,13 +87,17 @@ describe "Books API", type: :request do
                 }
             )
         end
+
     end
 
     describe "DELETE /book/:id" do
         let!(:book) {FactoryBot.create(:book, title: "Test author 3", author_id: first_author.id )}
+        let!(:user) {FactoryBot.create(:user, password: "test1234")}
+
         it 'delete a book' do
             expect {
-                delete "/api/v1/books/#{book.id}"
+                delete "/api/v1/books/#{book.id}",
+                headers: {"Authorization" => "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMSJ9.M1vu6qDej7HzuSxcfbE6KAMekNUXB3EWtxwS0pg4UGg"}
             }.to change { Book.count }.from(1).to(0)
             expect(response).to have_http_status(:no_content)
         end
