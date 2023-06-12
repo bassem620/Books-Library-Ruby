@@ -1,5 +1,3 @@
-require 'net/http'
-
 module Api
   module V1
     class BooksController < ApplicationController
